@@ -1,103 +1,117 @@
-import Image from "next/image";
+import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getAllPosts } from '@/lib/markdown';
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
 
-export default function Home() {
+function cleanExcerpt(excerpt: string): string {
+  // マークダウン記号を除去
+  return excerpt
+    .replace(/#{1,6}\s/g, '') // 見出し記号
+    .replace(/\*\*/g, '')     // 太字
+    .replace(/\*/g, '')       // 斜体・リスト
+    .replace(/`/g, '')        // コード
+    .replace(/\[.*?\]\(.*?\)/g, '') // リンク
+    .replace(/!\[.*?\]\(.*?\)/g, '') // 画像
+    .replace(/>\s*/g, '')     // 引用
+    .replace(/!{1,3}/g, '')   // 感嘆符
+    .replace(/^[#!\-*>\s]+/, '') // 行頭のマークダウン記号
+    .replace(/\s+[#!\-*>\s]+\s+/g, ' ') // 文中のマークダウン記号
+    .replace(/^#+\s*/, '') // 行頭の#記号を特別に除去
+    .trim();
+}
+
+export default async function Home() {
+  const posts = await getAllPosts();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-white">
+      <Header />
+      
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            ガジェットレビューブログ
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            AIが自動生成する最新ガジェット・テクノロジー製品のレビューと紹介
+          </p>
         </div>
+
+        {posts.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="text-gray-500 text-lg mb-4">
+              まだ記事がありません
+            </div>
+            <p className="text-gray-400">
+              自動生成スクリプトが記事を作成するのをお待ちください
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <article 
+                key={post.slug}
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                    <time dateTime={post.date}>
+                      {format(new Date(post.date), 'yyyy年MM月dd日', { locale: ja })}
+                    </time>
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                      {post.category}
+                    </span>
+                  </div>
+                  
+                  <h2 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
+                    <Link 
+                      href={`/posts/${post.slug}`}
+                      className="hover:text-blue-600 transition-colors"
+                    >
+                      {post.title}
+                    </Link>
+                  </h2>
+                  
+                  {post.excerpt && (
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {cleanExcerpt(post.excerpt)}
+                    </p>
+                  )}
+                  
+                  {post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {post.tags.slice(0, 3).map((tag) => (
+                        <span 
+                          key={tag}
+                          className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {post.tags.length > 3 && (
+                        <span className="text-gray-500 text-xs">
+                          +{post.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  
+                  <Link 
+                    href={`/posts/${post.slug}`}
+                    className="inline-block text-blue-600 hover:text-blue-800 font-medium text-sm"
+                  >
+                    続きを読む →
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <Footer />
     </div>
   );
 }

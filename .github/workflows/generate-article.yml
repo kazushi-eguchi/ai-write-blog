@@ -44,4 +44,4 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add content/
-        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/kazushi-eguchi/ai-write-blog.git main)
+        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git remote set-url origin https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/kazushi-eguchi/ai-write-blog.git && git push origin main)

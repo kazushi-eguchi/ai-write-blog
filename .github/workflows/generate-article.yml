@@ -2,8 +2,9 @@ name: Generate Daily Article
 
 on:
   schedule:
-    # 毎日午前9時（JST）に実行（UTC 00:00）
-    - cron: '0 0 * * *'
+    # 1日2回実行（午前9時と午後9時 JST）
+    # UTC時間: 00:00（午前9時 JST）と 12:00（午後9時 JST）
+    - cron: '0 0,12 * * *'
   workflow_dispatch: # 手動実行も可能
 
 jobs:

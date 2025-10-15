@@ -1,4 +1,5 @@
 {
+  "name": "ai-write-blog-v2",
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
@@ -10,11 +11,11 @@
     }
   },
   "env": {
-    "NEXT_PUBLIC_SITE_URL": "@site_url"
+    "NEXT_PUBLIC_SITE_URL": "https://ai-write-blog-v2.vercel.app"
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_SITE_URL": "@site_url"
+      "NEXT_PUBLIC_SITE_URL": "https://ai-write-blog-v2.vercel.app"
     }
   },
   "git": {

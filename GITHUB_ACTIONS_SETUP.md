@@ -8,36 +8,58 @@ fatal: unable to access 'https://github.com/kazushi-eguchi/ai-write-blog/': The 
 
 ## 解決方法
 
-### 1. 個人アクセストークンの作成
-
-1. **GitHubにログイン**
-2. **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
-3. **Generate new token** → **Generate new token (classic)**
-4. **トークン名**: `AI-Blog-Actions`
-5. **有効期限**: 無期限（推奨）または適切な期間
-6. **スコープ**: `repo`（すべてのリポジトリ権限）と `workflow` を選択
-7. **Generate token** をクリック
-8. **トークンをコピー**（一度しか表示されません）
-
-### 2. GitHubリポジトリでシークレットを設定
+### 1. ワークフロー権限の設定
 
 1. **GitHubリポジトリにアクセス**:
    - `https://github.com/kazushi-eguchi/ai-write-blog`
 
 2. **Settingsタブをクリック**
 
-3. **左メニューから「Secrets and variables」→「Actions」を選択**
+3. **左メニューから「Actions」→「General」を選択**
 
-4. **「New repository secret」をクリック**
+4. **「Workflow permissions」セクションを探す**
 
-### 3. 必須シークレットの追加
+5. **以下の設定を確認・変更**:
+   - ✅ **Read and write permissions** を選択
+   - ✅ **Allow GitHub Actions to create and approve pull requests** をチェック
 
-以下のシークレットを追加してください：
+6. **ページ下部の「Save」ボタンをクリック**
+
+### 2. ブランチ保護ルールの確認と設定
+
+1. **Settingsタブをクリック**
+
+2. **左メニューから「Branches」を選択**
+
+3. **「Branch protection rules」セクションを探す**
+
+4. **mainブランチの保護ルールがある場合**:
+   - **保護ルール名をクリック**（通常は「main」）
+   - **設定画面で以下の項目を確認**:
+     - ✅ **Allow bypassing pull request reviews** をチェック（オプション）
+     - ✅ **Allow specified actors to bypass required pull requests** でワークフローを許可
+     - **「Include administrators」をチェック**（管理者も許可）
+
+5. **保護ルールがない場合**:
+   - **「Add branch protection rule」ボタンをクリック**
+   - **Branch name pattern** に `main` と入力
+   - **以下の設定を選択**:
+     - ✅ **Require a pull request before merging**（必須）
+     - ✅ **Require approvals**（1以上）
+     - ✅ **Allow specified actors to bypass required pull requests** でワークフローを許可
+     - ✅ **Include administrators** をチェック
+
+6. **ページ下部の「Create」または「Save changes」ボタンをクリック**
+
+### 3. 必須シークレットの設定
+
+1. **Settings** → **Secrets and variables** → **Actions** を選択
+2. **「New repository secret」をクリック**
+3. 以下のシークレットを追加：
 
 #### 必須シークレット
 | シークレット名 | 値 | 説明 |
 |---------------|-----|------|
-| `PERSONAL_ACCESS_TOKEN` | `ghp_...`（作成したトークン） | GitHub個人アクセストークン |
 | `DEEPSEEK_API_KEY` | `sk-4adcd55848d84d1ab4733a8bd97eade1` | DeepSeek APIキー |
 
 #### オプションシークレット

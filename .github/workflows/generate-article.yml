@@ -37,9 +37,17 @@ jobs:
       run: |
         npx tsx scripts/generate-article.ts
 
-    - name: Commit and push if changes
+    - name: Commit if changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add content/
-        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git pull origin main --rebase --autostash && git push --force-with-lease origin main)
+        git diff --staged --quiet || git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')"
+    
+    - name: Pull and rebase
+      run: |
+        git pull origin main --rebase --autostash
+    
+    - name: Push changes
+      run: |
+        git push --force-with-lease origin main

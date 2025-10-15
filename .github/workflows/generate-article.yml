@@ -17,7 +17,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
     - name: Setup Node.js
@@ -38,10 +38,8 @@ jobs:
         npx tsx scripts/generate-article.ts
 
     - name: Commit and push if changes
-      env:
-        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add content/
-        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git remote set-url origin https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/kazushi-eguchi/ai-write-blog.git && git push origin main)
+        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git push)

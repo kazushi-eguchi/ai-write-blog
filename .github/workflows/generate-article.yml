@@ -41,7 +41,5 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git fetch origin
-        git reset --hard origin/main
         git add content/
-        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git push --force-with-lease)
+        git diff --staged --quiet || (git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')" && git fetch origin && git rebase origin/main && git push --force-with-lease)

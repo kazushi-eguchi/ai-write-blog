@@ -120,8 +120,8 @@ export class FreeImageGenerator {
     const keywords = this.extractKeywords(theme);
     
     for (let i = 0; i < count; i++) {
-      // より関連性の高い画像を提供するために、テーマに基づいた画像IDを使用
-      const imageId = this.getImageIdByTheme(theme, i);
+      // よりランダムな画像を提供するために、テーマとインデックスに基づいた画像IDを使用
+      const imageId = this.getRandomImageIdByTheme(theme, i);
       const imageUrl = `https://picsum.photos/id/${imageId}/800/600`;
       
       images.push({
@@ -135,24 +135,34 @@ export class FreeImageGenerator {
   }
 
   /**
-   * テーマに基づいて画像IDを選択
+   * テーマに基づいてランダムな画像IDを選択
    */
-  private getImageIdByTheme(theme: string, index: number): number {
-    // テーマに基づいて関連性の高い画像IDを選択
-    const techImages = [1, 10, 20, 30, 40, 50]; // テクノロジー関連の画像ID
-    const gadgetImages = [60, 70, 80, 90, 100]; // ガジェット関連の画像ID
-    const audioImages = [200, 210, 220, 230]; // オーディオ関連の画像ID
+  private getRandomImageIdByTheme(theme: string, index: number): number {
+    // より広い範囲の画像IDを使用
+    const techImages = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    const gadgetImages = [160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300];
+    const audioImages = [310, 320, 330, 340, 350, 360, 370, 380, 390, 400];
+    const computerImages = [410, 420, 430, 440, 450, 460, 470, 480, 490, 500];
+    const phoneImages = [510, 520, 530, 540, 550, 560, 570, 580, 590, 600];
     
+    // テーマに基づいて適切な画像カテゴリを選択
+    let imagePool: number[];
     if (theme.includes('ヘッドホン') || theme.includes('イヤホン') || theme.includes('オーディオ')) {
-      return audioImages[index % audioImages.length];
-    } else if (theme.includes('スマートフォン') || theme.includes('タブレット') || theme.includes('PC')) {
-      return techImages[index % techImages.length];
-    } else if (theme.includes('ガジェット') || theme.includes('デバイス')) {
-      return gadgetImages[index % gadgetImages.length];
+      imagePool = audioImages;
+    } else if (theme.includes('スマートフォン') || theme.includes('iPhone') || theme.includes('Galaxy')) {
+      imagePool = phoneImages;
+    } else if (theme.includes('PC') || theme.includes('ノートパソコン') || theme.includes('ラップトップ')) {
+      imagePool = computerImages;
+    } else if (theme.includes('ガジェット') || theme.includes('デバイス') || theme.includes('テクノロジー')) {
+      imagePool = gadgetImages;
+    } else {
+      imagePool = techImages;
     }
     
-    // デフォルトはテクノロジー画像
-    return techImages[index % techImages.length];
+    // インデックスと現在のタイムスタンプを組み合わせてよりランダムな選択
+    const seed = Date.now() % 1000;
+    const poolIndex = (index + seed) % imagePool.length;
+    return imagePool[poolIndex];
   }
 
   /**
@@ -180,7 +190,7 @@ export class FreeImageGenerator {
     const keywords = this.extractKeywords(theme);
     
     for (let i = 0; i < count; i++) {
-      const imageId = this.getImageIdByTheme(theme, i);
+      const imageId = this.getRandomImageIdByTheme(theme, i);
       images.push({
         url: `https://picsum.photos/id/${imageId}/800/600`,
         description: `${keywords.join(' ')}に関する画像`,

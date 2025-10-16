@@ -37,15 +37,11 @@ jobs:
       run: |
         npx tsx scripts/generate-article.ts
 
-    - name: Generate sitemap
-      run: |
-        npx tsx scripts/generate-sitemap.ts
-
     - name: Commit if changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add content/ public/
+        git add content/
         git diff --staged --quiet || git commit -m "🤖 Auto-generated article $(date +'%Y-%m-%d')"
     
     - name: Pull and rebase

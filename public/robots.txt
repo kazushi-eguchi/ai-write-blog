@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ai-write-blog-v2.vercel.app/sitemap.xml

@@ -1,11 +1,18 @@
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { RakutenProduct } from './rakuten';
 
-const postsDirectory = join(process.cwd(), 'content');
+// サーバーサイドでのみfsを使用
+let fs: any = null;
+let path: any = null;
+
+if (typeof window === 'undefined') {
+  fs = require('fs');
+  path = require('path');
+}
+
+const postsDirectory = typeof window === 'undefined' ? path?.join(process.cwd(), 'content') : '';
 
 export interface Post {
   slug: string;
@@ -19,13 +26,28 @@ export interface Post {
 }
 
 export function getPostSlugs(): string[] {
-  return readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
+  if (typeof window !== 'undefined') {
+    return [];
+  }
+  return fs?.readdirSync(postsDirectory).filter((file: string) => file.endsWith('.md')) || [];
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
+  if (typeof window !== 'undefined') {
+    return {
+      slug: '',
+      title: '',
+      date: '',
+      tags: [],
+      category: '未分類',
+      content: '',
+      excerpt: ''
+    };
+  }
+  
   const realSlug = slug.replace(/\.md$/, '');
-  const fullPath = join(postsDirectory, `${realSlug}.md`);
-  const fileContents = readFileSync(fullPath, 'utf8');
+  const fullPath = path?.join(postsDirectory, `${realSlug}.md`);
+  const fileContents = fs?.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
   // アフィリエイトセクションを除去
@@ -73,8 +95,8 @@ export function getAllTags(): string[] {
   const allTags = new Set<string>();
   
   slugs.forEach(slug => {
-    const fullPath = join(postsDirectory, slug);
-    const fileContents = readFileSync(fullPath, 'utf8');
+    const fullPath = path?.join(postsDirectory, slug);
+    const fileContents = fs?.readFileSync(fullPath, 'utf8');
     const { data } = matter(fileContents);
     
     if (data.tags && Array.isArray(data.tags)) {
@@ -90,8 +112,8 @@ export function getAllCategories(): string[] {
   const allCategories = new Set<string>();
   
   slugs.forEach(slug => {
-    const fullPath = join(postsDirectory, slug);
-    const fileContents = readFileSync(fullPath, 'utf8');
+    const fullPath = path?.join(postsDirectory, slug);
+    const fileContents = fs?.readFileSync(fullPath, 'utf8');
     const { data } = matter(fileContents);
     
     if (data.category) {

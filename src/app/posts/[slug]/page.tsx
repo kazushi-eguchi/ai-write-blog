@@ -1,21 +1,28 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { getPostBySlug, getAllPosts } from '@/lib/markdown';
+import { use } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import { RakutenAffiliateProducts } from '../../../components/RakutenAffiliateProducts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-
-import { RakutenClient } from '../../../lib/rakuten';
+interface Post {
+  slug: string;
+  title: string;
+  date: string;
+  tags: string[];
+  category: string;
+  content: string;
+  excerpt?: string;
+}
 
 interface RakutenProduct {
   itemName: string;
@@ -26,25 +33,6 @@ interface RakutenProduct {
   shopName: string;
   reviewAverage: number;
   reviewCount: number;
-}
-
-async function getRakutenProducts(articleContent: string): Promise<RakutenProduct[]> {
-  try {
-    const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
-    const rakutenAffiliateId = process.env.RAKUTEN_AFFILIATE_ID;
-    
-    if (!rakutenAppId || !rakutenAffiliateId) {
-      console.warn('楽天API設定がありません');
-      return [];
-    }
-
-    const rakutenClient = new RakutenClient(rakutenAppId, rakutenAffiliateId);
-    const products = await rakutenClient.getRelatedProducts(articleContent, 3);
-    return products;
-  } catch (error) {
-    console.error('楽天商品取得エラー:', error);
-    return [];
-  }
 }
 
 function RakutenWidget() {
@@ -83,16 +71,65 @@ function RakutenWidget() {
   );
 }
 
-export default async function PostPage({ params }: Props) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
+export default function PostPage({ params }: Props) {
+  const resolvedParams = use(params);
+  const { slug } = resolvedParams;
+  
+  const [post, setPost] = useState<Post | null>(null);
+  const [rakutenProducts, setRakutenProducts] = useState<RakutenProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // 記事データを取得
+        const response = await fetch(`/api/posts/${slug}`);
+        if (!response.ok) {
+          notFound();
+          return;
+        }
+        const postData = await response.json();
+        setPost(postData);
+
+        // 楽天商品を取得
+        const rakutenResponse = await fetch(`/api/rakuten-products`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ content: postData.content }),
+        });
+        
+        if (rakutenResponse.ok) {
+          const products = await rakutenResponse.json();
+          setRakutenProducts(products);
+        }
+      } catch (error) {
+        console.error('データ取得エラー:', error);
+        notFound();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">読み込み中...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!post) {
     notFound();
   }
-
-  // 楽天商品をAPIから直接取得
-  const rakutenProducts = await getRakutenProducts(post.content);
 
   return (
     <div className="min-h-screen bg-white">
@@ -111,24 +148,24 @@ export default async function PostPage({ params }: Props) {
             </nav>
             
             <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-              <time dateTime={post.date}>
-                {format(new Date(post.date), 'yyyy年MM月dd日', { locale: ja })}
+              <time dateTime={post!.date}>
+                {format(new Date(post!.date), 'yyyy年MM月dd日', { locale: ja })}
               </time>
               <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                {post.category}
+                {post!.category}
               </span>
             </div>
             
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {post.title}
+              {post!.title}
             </h1>
 
             {/* 楽天アフィリエイトウィジェット */}
             <RakutenWidget />
             
-            {post.tags.length > 0 && (
+            {post!.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
+                {post!.tags.map((tag) => (
                   <span
                     key={tag}
                     className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
@@ -143,7 +180,7 @@ export default async function PostPage({ params }: Props) {
           <div
             className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-800 prose-ul:text-gray-900 prose-ol:text-gray-900 prose-li:text-gray-900"
             style={{ color: '#111827' }}
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: post!.content }}
           />
 
           {/* 楽天アフィリエイト商品セクション */}

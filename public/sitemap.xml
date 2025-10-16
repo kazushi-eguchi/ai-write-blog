@@ -2,24 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- ホームページ -->
   <url>
-    <loc>https://ai-write-blog.vercel.app</loc>
-    <lastmod>2025-10-16T00:42:22.289Z</lastmod>
+    <loc>https://ai-write-blog-v2.vercel.app</loc>
+    <lastmod>2025-10-16T00:56:34.503Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- カテゴリーページ -->
   <url>
-    <loc>https://ai-write-blog.vercel.app/categories</loc>
-    <lastmod>2025-10-16T00:42:22.291Z</lastmod>
+    <loc>https://ai-write-blog-v2.vercel.app/categories</loc>
+    <lastmod>2025-10-16T00:56:34.504Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- タグページ -->
   <url>
-    <loc>https://ai-write-blog.vercel.app/tags</loc>
-    <lastmod>2025-10-16T00:42:22.291Z</lastmod>
+    <loc>https://ai-write-blog-v2.vercel.app/tags</loc>
+    <lastmod>2025-10-16T00:56:34.504Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -27,103 +27,103 @@
   <!-- 記事ページ -->
   
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/meta-quest-3-vs-apple-vision-promr</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/meta-quest-3-vs-apple-vision-promr</loc>
     <lastmod>2025-10-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/sony-wh1000xm5</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/sony-wh1000xm5</loc>
     <lastmod>2025-10-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-aihumane-ai-pin</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-aihumane-ai-pin</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-framework-laptop-16pc</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-framework-laptop-16pc</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-nothing-phone-2</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-nothing-phone-2</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-oura-ring-vs-ultrahuman-air-vs-ringconn</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-oura-ring-vs-ultrahuman-air-vs-ringconn</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-qi2</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-qi2</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-rabbit-r1-vs-humane-ai-pinai</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-rabbit-r1-vs-humane-ai-pinai</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/6-rog-ally-vs-steam-deck</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/6-rog-ally-vs-steam-deck</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/7-amazon-echo-hub</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/7-amazon-echo-hub</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/7-matter</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/7-matter</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/8-apple-watch-series-10</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/8-apple-watch-series-10</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/8-sony-wh1000xm5-vs-apple-airpods-max</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/8-sony-wh1000xm5-vs-apple-airpods-max</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/apple-vision-pro</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/apple-vision-pro</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/google-pixel-8-proai</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/google-pixel-8-proai</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ai-write-blog.vercel.app/posts/samsung-galaxy-z-fold6</loc>
+    <loc>https://ai-write-blog-v2.vercel.app/posts/samsung-galaxy-z-fold6</loc>
     <lastmod>2025-10-14T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

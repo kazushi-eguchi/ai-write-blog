@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ai-write-blog.vercel.app/sitemap.xml
+Sitemap: https://ai-write-blog-v2.vercel.app/sitemap.xml

@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { getAllPosts } from '../src/lib/markdown';
 
 async function generateSitemap() {
-  const baseUrl = 'https://ai-write-blog.vercel.app'; // VercelのデプロイURLに合わせて変更
+  const baseUrl = 'https://ai-write-blog-v2.vercel.app'; // VercelのデプロイURLに合わせて変更
   const posts = await getAllPosts();
   
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

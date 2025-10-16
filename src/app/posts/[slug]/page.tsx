@@ -6,11 +6,35 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import { RakutenAffiliateProducts } from '../../../components/RakutenAffiliateProducts';
-import { RakutenClient } from '../../../lib/rakuten';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: '記事が見つかりません',
+    };
+  }
+
+  return {
+    title: `${post.title} - ガジェットレビューブログ`,
+    description: post.excerpt || 'AIによって自動生成された記事です',
+  };
+}
+
+import { RakutenClient } from '../../../lib/rakuten';
 
 interface RakutenProduct {
   itemName: string;
@@ -42,7 +66,6 @@ async function getRakutenProducts(articleContent: string): Promise<RakutenProduc
   }
 }
 
-
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -62,8 +85,8 @@ export default async function PostPage({ params }: Props) {
         <article className="bg-white">
           <header className="mb-8">
             <nav className="mb-4">
-              <Link
-                href="/"
+              <Link 
+                href="/" 
                 className="text-blue-600 hover:text-blue-800 text-sm"
               >
                 ← ホームに戻る
@@ -86,14 +109,14 @@ export default async function PostPage({ params }: Props) {
             {/* 楽天アフィリエイトウィジェット */}
             <div className="mb-6">
               <script
+                type="text/javascript"
                 dangerouslySetInnerHTML={{
-                  __html: `rakuten_design="slide";rakuten_affiliateId="100289c9.7a3c312b.100289ca.99ca7f67";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="600x200";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="on";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="${Date.now()}";`
+                  __html: `rakuten_design="slide";rakuten_affiliateId="100289c9.7a3c312b.100289ca.99ca7f67";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="600x200";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="on";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="1760510810665";`
                 }}
               />
               <script
                 type="text/javascript"
                 src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js?20230106"
-                async
               />
             </div>
             

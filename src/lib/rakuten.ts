@@ -56,13 +56,43 @@ export class RakutenClient {
         searchParams.append('minPrice', String(params.minPrice));
       }
 
-      const response = await axios.get(`${this.baseURL}?${searchParams.toString()}`);
+      // レート制限対策: リトライロジックを追加
+      const maxRetries = 3;
+      let lastError: any;
 
-      if (response.data.Items && response.data.Items.length > 0) {
-        return response.data.Items.map((item: any) => this.transformProduct(item));
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          // レート制限対策: リクエスト間に遅延を追加
+          if (attempt > 1) {
+            const delay = Math.pow(2, attempt - 1) * 1000; // 指数バックオフ: 2秒, 4秒, 8秒
+            console.log(`楽天API: リトライ ${attempt}/${maxRetries} (${delay}ms待機)`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+
+          const response = await axios.get(`${this.baseURL}?${searchParams.toString()}`);
+
+          if (response.data.Items && response.data.Items.length > 0) {
+            return response.data.Items.map((item: any) => this.transformProduct(item));
+          }
+
+          return [];
+        } catch (error: any) {
+          lastError = error;
+          
+          // 429エラーの場合はリトライ
+          if (error.response?.status === 429) {
+            console.warn(`楽天API: レート制限エラー (${attempt}/${maxRetries})`);
+            continue;
+          }
+          
+          // その他のエラーは即時終了
+          break;
+        }
       }
 
-      return [];
+      // すべてのリトライが失敗した場合
+      console.error('楽天API: すべてのリトライが失敗しました', lastError);
+      return this.generateFallbackProducts(params.keyword);
     } catch (error) {
       console.error('楽天API Error:', error);
       // フォールバックとしてダミーデータを返す
@@ -102,7 +132,7 @@ export class RakutenClient {
     let products: RakutenProduct[] = [];
     
     if (specificKeywords.length > 0) {
-      // 具体的な製品名や機能で検索
+      // 具体的な製品名や機能で検索（リクエスト間に遅延を追加）
       for (const keyword of specificKeywords.slice(0, 2)) {
         const searchResults = await this.searchProducts({
           keyword: keyword,
@@ -111,6 +141,11 @@ export class RakutenClient {
           minPrice: 1000,
         });
         products = [...products, ...searchResults];
+        
+        // 複数リクエスト時のレート制限対策: 1秒待機
+        if (specificKeywords.length > 1) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
     }
     

@@ -6,8 +6,6 @@ category: "カメラ"
 excerpt: "Apple Vision Proの実用性レビュー：日常生活でのXR体験を徹底検証 はじめに 実際の着用イメージ：軽量設計ながらも存在感のあるデザイン Apple Vision Proが発表されてから、XR（Extended Reality）市場に新たな風が吹き込んでいます。今回は、この革新的なデバイ..."
 ---
 
-# Apple Vision Proの実用性レビュー：日常生活でのXR体験を徹底検証
-
 ![Apple Vision Proの実用性レビュー：日常生活でのXR体験を徹底検証 - Apple画像 1](https://picsum.photos/id/80/800/600)
 
 

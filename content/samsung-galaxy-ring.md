@@ -6,8 +6,6 @@ category: "カメラ"
 excerpt: "Samsung Galaxy Ringがもたらす睡眠・健康管理の新常識 はじめてのスマートリング、その実力は？ シンプルでスタイリッシュなデザインが特徴のGalaxy Ring スマートリング市場に待望の新参者が登場しました。Samsungが発表した「Galaxy Ring」は、従来のスマートウォッ..."
 ---
 
-# Samsung Galaxy Ringがもたらす睡眠・健康管理の新常識
-
 ![Samsung Galaxy Ringがもたらす睡眠・健康管理の新常識 - Samsung画像 1](https://picsum.photos/id/1/800/600)
 
 

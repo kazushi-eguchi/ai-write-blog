@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
-import { RakutenAffiliateProducts } from '../../../components/RakutenAffiliateProducts';
+import { RakutenWidget } from '../../../components/RakutenWidget';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -34,37 +34,6 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-import { RakutenClient } from '../../../lib/rakuten';
-
-interface RakutenProduct {
-  itemName: string;
-  itemUrl: string;
-  affiliateUrl: string;
-  itemPrice: number;
-  imageUrl: string;
-  shopName: string;
-  reviewAverage: number;
-  reviewCount: number;
-}
-
-async function getRakutenProducts(articleContent: string): Promise<RakutenProduct[]> {
-  try {
-    const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
-    const rakutenAffiliateId = process.env.RAKUTEN_AFFILIATE_ID;
-    
-    if (!rakutenAppId || !rakutenAffiliateId) {
-      console.warn('楽天API設定がありません');
-      return [];
-    }
-
-    const rakutenClient = new RakutenClient(rakutenAppId, rakutenAffiliateId);
-    const products = await rakutenClient.getRelatedProducts(articleContent, 3);
-    return products;
-  } catch (error) {
-    console.error('楽天商品取得エラー:', error);
-    return [];
-  }
-}
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
@@ -73,9 +42,6 @@ export default async function PostPage({ params }: Props) {
   if (!post) {
     notFound();
   }
-
-  // 楽天商品をAPIから直接取得
-  const rakutenProducts = await getRakutenProducts(post.content);
 
   return (
     <div className="min-h-screen bg-white">
@@ -105,20 +71,6 @@ export default async function PostPage({ params }: Props) {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {post.title}
             </h1>
-
-            {/* 楽天アフィリエイトウィジェット */}
-            <div className="mb-6">
-              <script
-                type="text/javascript"
-                dangerouslySetInnerHTML={{
-                  __html: `rakuten_design="slide";rakuten_affiliateId="100289c9.7a3c312b.100289ca.99ca7f67";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="600x200";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="on";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="1760510810665";`
-                }}
-              />
-              <script
-                type="text/javascript"
-                src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js?20230106"
-              />
-            </div>
             
             {post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -140,11 +92,10 @@ export default async function PostPage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
-          {/* 楽天アフィリエイト商品セクション */}
-          {rakutenProducts.length > 0 && (
-            <RakutenAffiliateProducts products={rakutenProducts} />
-          )}
+          {/* 楽天アフィリエイトウィジェット */}
+          <RakutenWidget />
 
+   
           <footer className="mt-12 pt-8 border-t">
             <div className="text-center text-gray-500 text-sm">
               <p>この記事はAIによって自動生成されました</p>
